@@ -39,7 +39,6 @@ class HolbertonBnBTestCase(unittest.TestCase):
             cls.place.amenities.append(cls.amenity_2)
         else:
             cls.place.amenity_ids.append(cls.amenity_2.id)
-
         cls.place.save()
         cls.review = Review(text="Stellar",
                             place_id=cls.place.id, user_id=cls.user.id)
@@ -735,12 +734,6 @@ class HolbertonBnBTestCase(unittest.TestCase):
                          data="bad", follow_redirects=True)
             self.assertEqual(resp.status_code, 400)
             self.assertIn(b"Not a JSON", resp.data)
-
-    def test_places_amenities_get(self):
-        """Test GET with specific places id"""
-        with self.__app as a:
-            resp = a.get("/api/v1/places/{}/amenities".format(self.place.id))
-            self.assertEqual(resp.status_code, 200)
 
     def test_places_amenities_bad_get(self):
         """Test bad GET with specific places id"""

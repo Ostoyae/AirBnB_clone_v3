@@ -87,7 +87,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != "db", "not testing file storage")
     def test_all_no_class(self):
         """Test all method without a specified class."""
-        objs = storage.all()
+        objs = models.storage.all()
         self.assertEqual(type(objs), dict)
         self.assertEqual(len(objs), 2)
 
