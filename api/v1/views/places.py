@@ -112,7 +112,7 @@ def places_search():
                 amenity_ids = [a.id for a in p.amenities]
             else:
                 amenity_ids = p.amenity_ids
-            if set(amenity_ids).issubset(set(amenities)):
+            if set(amenities).issubset(set(amenity_ids)):
                 p.__dict__.pop("amenities", None)
                 p.__dict__.pop("amenity_ids", None)
                 places.append(p.to_dict())
