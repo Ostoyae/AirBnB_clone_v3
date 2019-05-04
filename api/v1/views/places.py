@@ -5,6 +5,8 @@ from flask import abort, jsonify, request
 from flasgger import swag_from
 from models import storage
 from models.place import Place
+from models.engine.db_storage import DBStorage
+from models.engine.file_storage import FileStorage
 
 
 @app_views.route("/cities/<city_id>/places", methods=["GET", "POST"])
@@ -105,9 +107,15 @@ def places_search():
 
     amenities = data.get("amenities")
     if amenities is not None and len(amenities) != 0:
-        for a in amenities:
-            amenity = storage.get("Amenity", a)
-            if amenity is not None:
-                [places.append(p.to_dict()) for p in amenity.places]
+        for p in storage.all("Place").values():
+            if type(storage) == DBStorage:
+                amenity_ids = [a.id for a in p.amenities]
+            else:
+                amenity_ids = p.amenity_ids
+            if set(amenity_ids).issubset(set(amenities)):
+                p.__dict__.pop("amenities", None)
+                p.__dict__.pop("amenity_ids", None)
+                places.append(p.to_dict())
+                break
 
     return jsonify(places)
