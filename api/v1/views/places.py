@@ -116,6 +116,5 @@ def places_search():
                 p.__dict__.pop("amenities", None)
                 p.__dict__.pop("amenity_ids", None)
                 places.append(p.to_dict())
-                break
 
     return jsonify(places)
