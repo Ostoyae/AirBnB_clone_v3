@@ -116,6 +116,9 @@ def places_search():
                 p.__dict__.pop("amenities", None)
                 p.__dict__.pop("amenity_ids", None)
                 place_amenities.append(p)
-        places = list(set(places) & set(place_amenities))
+        if len(places) != 0:
+            places = list(set(places) & set(place_amenities))
+        else:
+            places = place_amenities
 
     return jsonify([p.to_dict() for p in places])
