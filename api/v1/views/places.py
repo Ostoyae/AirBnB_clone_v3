@@ -95,17 +95,17 @@ def places_search():
         for s in states:
             state = storage.get("State", s)
             if state is not None:
-                for c in state.cities:
-                    [places.append(p.to_dict()) for p in c.places]
+                [[places.append(p) for p in c.places] for c in state.cities]
 
     cities = data.get("cities")
     if cities is not None and len(cities) != 0:
         for c in cities:
             city = storage.get("City", c)
             if city is not None:
-                [places.append(p.to_dict()) for p in city.places]
+                [places.append(p) for p in city.places]
 
     amenities = data.get("amenities")
+    place_amenities = []
     if amenities is not None and len(amenities) != 0:
         for p in storage.all("Place").values():
             if type(storage) == DBStorage:
@@ -115,6 +115,7 @@ def places_search():
             if set(amenities).issubset(set(amenity_ids)):
                 p.__dict__.pop("amenities", None)
                 p.__dict__.pop("amenity_ids", None)
-                places.append(p.to_dict())
+                place_amenities.append(p)
+        places = list(set(places) & set(place_amenities))
 
-    return jsonify(places)
+    return jsonify([p.to_dict() for p in places])
