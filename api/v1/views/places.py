@@ -80,6 +80,7 @@ def place_id(place_id):
 
 
 @app_views.route("/places_search", methods=["POST"])
+@swag_from("../apidocs/places/search.yml")
 def places_search():
     """Retrives Place objects depending on the JSON request data."""
     data = request.get_json(silent=True)
